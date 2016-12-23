@@ -1,0 +1,30 @@
+FROM alpine:3.4
+
+ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+WORKDIR /usr/src
+
+RUN apk add --no-cache --update \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+            git \
+            file \
+            yasm \
+            curl \
+            libtool \
+            autoconf \
+            automake \
+            fftw-dev \
+            coreutils \
+            lcms2-dev \
+            build-base \
+            cython-dev \
+            ffmpeg-dev \
+            libass-dev \
+            opencv-dev \
+            python3-dev \
+            xvidcore-dev \
+            libsndfile-dev \
+            imagemagick-dev \
+            tesseract-ocr-dev
+
+

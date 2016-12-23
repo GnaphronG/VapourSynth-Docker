@@ -1,0 +1,46 @@
+diff --git a/include/vectorclass/vectormath_exp.h b/include/vectorclass/vectormath_exp.h
+index 49f0e09..b8c4539 100644
+--- a/include/vectorclass/vectormath_exp.h
++++ b/include/vectorclass/vectormath_exp.h
+@@ -93,7 +93,6 @@ static inline Vec8f vm_pow2n (Vec8f const & n) {
+ #endif // MAX_VECTOR_SIZE >= 256
+ 
+ #if MAX_VECTOR_SIZE >= 512
+-
+ static inline Vec8d vm_pow2n (Vec8d const & n) {
+ #ifdef __AVX512ER__
+     return _mm512_exp2a23_round_pd(n, _MM_FROUND_NO_EXC); // this is exact only for integral n
+@@ -1261,8 +1260,6 @@ static inline Vec16f square_cbrt(Vec16f const & x) {
+     return cbrt_f<Vec16f, Vec16ui, Vec16fb, 2> (x);
+ }
+ 
+-#endif // MAX_VECTOR_SIZE >= 512
+-
+ // Helper function for power function: insert special values of pow(x,y) when x=0:
+ // y<0 -> inf, y=0 -> 1, y>0 -> 0, y=nan -> nan
+ static inline Vec8d wm_pow_case_x0(Vec8db const & xiszero, Vec8d const & y, Vec8d const & z) {
+@@ -1273,6 +1270,7 @@ static inline Vec8d wm_pow_case_x0(Vec8db const & xiszero, Vec8d const & y, Vec8
+     return select(xiszero, select(y < 0., infinite_vec<Vec8d>(), select(y == 0., Vec8d(1.), Vec8d(0.))), z);
+ #endif
+ }
++#endif // MAX_VECTOR_SIZE >= 512
+ 
+ static inline Vec4d wm_pow_case_x0(Vec4db const & xiszero, Vec4d const & y, Vec4d const & z) {
+ //#if defined __AVX512VL__ && defined ?
+@@ -1527,8 +1525,6 @@ inline Vec8d pow<float>(Vec8d const & x, float const & y) {
+     return pow_template_d<Vec8d, Vec8q, Vec8db>(x, (double)y);
+ }
+ 
+-#endif // MAX_VECTOR_SIZE >= 512
+-
+ // Helper function for power function: insert special values of pow(x,y) when x=0:
+ // y<0 -> inf, y=0 -> 1, y>0 -> 0, y=nan -> nan
+ static inline Vec16f wm_pow_case_x0(Vec16fb const & xiszero, Vec16f const & y, Vec16f const & z) {
+@@ -1539,6 +1535,7 @@ static inline Vec16f wm_pow_case_x0(Vec16fb const & xiszero, Vec16f const & y, V
+     return select(xiszero, select(y < 0.f, infinite_vec<Vec16f>(), select(y == 0.f, Vec16f(1.f), Vec16f(0.f))), z);
+ #endif
+ }
++#endif // MAX_VECTOR_SIZE >= 512
+ 
+ static inline Vec8f wm_pow_case_x0(Vec8fb const & xiszero, Vec8f const & y, Vec8f const & z) {
+     return select(xiszero, select(y < 0.f, infinite_vec<Vec8f>(), select(y == 0.f, Vec8f(1.f), Vec8f(0.f))), z);
