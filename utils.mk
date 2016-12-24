@@ -2,7 +2,7 @@ define lc =
 	$(shell echo $1 | tr '[:upper:]' '[:lower:]')
 endef
 
-PROJECT := $(shell basename ${PWD})
+PROJECT ?= $(shell basename ${PWD})
 IMAGE := $(call lc,${PROJECT})
 TAG := $(shell date +%s)
 USER_ID := $(shell id -u)
