@@ -30,8 +30,8 @@ shell: ## Run the project docker image and destroy the container after use
 	docker run -it --rm --user ${USER_ID}:${USER_GROUP} --name ${IMAGE} --volume ${PWD}:/data --entrypoint sh ${IMAGE}
 
 clean:
-	@rm -rf src/vapoursynth-R* zimg-release-* vapoursynth-plugins build
-	@docker rmi ${BUILD_IMAGE} 
+	-rm -rf src/vapoursynth-R* zimg-release-* vapoursynth-plugins build
+	-docker rmi ${BUILD_IMAGE} 
 
 
 .PHONY: all build run
