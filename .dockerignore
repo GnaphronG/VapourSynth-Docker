@@ -1,1 +1,6 @@
-build Dockerfile.build Makefile utils.mk
+Dockerfile
+Dockerfile.build
+Makefile
+utils.mk
+README.md
+src

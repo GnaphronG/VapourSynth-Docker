@@ -7,6 +7,8 @@ IMAGE := $(call lc,${PROJECT})
 TAG := $(shell date +%s)
 USER_ID := $(shell id -u)
 USER_GROUP := $(shell id -g)
+CORES ?= $(shell grep -c ^processor /proc/cpuinfo) 
+JOBS ?= $(shell $(( ${CORES} + 1 )))
 
 help:
 	@echo "Rules:"
