@@ -1,0 +1,25 @@
+sudo: required
+
+env:
+  global:
+      - secure: PLDpwZpbdt35/L4mYN8QnN/E3LGcndGo7JwCL3s03UiIUWO6qq2FhZSVoJQSVwUibMK2HaQ3VPKPOH2VddU0D7HpgRvytqgj7+A0mNfD/7xSR9wosHX8a6WyTZn0VCi/2Li8QiXTDoAO46Qgo3XmHvrfG1JwOnChw+WDkv21RH0zpddHTs/1vp0/B6K3KHWWB9F1Tq18Le8HynaovOFnyCIHe2s4/FUiz4wqa4pzVlt5c9kezpx008psoTXEjueyGirLL8Ms0DfPM9F1mSHlNs9j0+WMUARsLCTlanor4ODs4xNGTJW4W257fhNjz3u658MFvJqzDMM7iMTwQIopfEIPuFf5EEXbezHK+fh98GxPRPktDzOds06InRwImeSgEXKtMQSU6bdVHD/OMgRa+WsqBpyY20Jaiy7T91mVCSE/kEX++pxPpSexnbk3tCTpB+RP+lu3fhx1r+ez3VZ4/70rdjb8c7X01iqjIhlImmsp3MEfqQHIQx0RbCOayRi7V+D3KB0CX0uJzRIqDnIWipfEutK99UFiEJLIwgSpQcwpjy+Zx/6fPTO8wZAkif/NdnK563MPVl31Ok/Akit4H6CCng1a9qYpsFsgP6juaGw3dU4pjvQKmulcm7JuY55b8TNw8cDOLm27ByY/scoTbzunRbDsqR0KCieJbZ7TKYE=
+      - secure: Z9lEKIxLMWLjwTM6j78wc7fBEnpbD+F3oyyuVeopXOGDMMwf0cuMjfug2OB2OlTpCk58PD+aDCtfP7ih5BwUI0lFY4SQu06WKJ/0CyfrMlCpRxDKejU2Kx3zvQiD5egjQC3fUeklG06CDLmMslTfxwu85WtziJEwYiYUHMOQNWy+hPnWGMlO1y2G8IoVdE2hw7jBmZTu0ZdnOUE1sEAznn95ZdK7dvn+fIBDTa3aBlAXS2hq28dq8DBU4D7PtQ8FpCf6pLJMClqSJnEONoE/VsSzBhO90OypfCkbUYunOVBauMAZ3KkZCwacWmN58zM1VMgaBpQQf13a9Ina3aERseYnV/rx7reyB8auxqh/sqCR4wyhXdOjJ40t1X/eBTRvNmrs9I+4QS+DvNnyyqkxiEjXYNZ7Rt4CdEX8X8Q1oG57ot7KSgMTWf6OeDISQ46NdGga+uFTORwxNd93LzkJMHDuxQ9Kh6+QkpHhg15U9/2TfQe51Fj4Sevfn6np61bT5fCXV1Q1Yiqxg22ieUjpJu9oKy0facPfghQSIB0CmZ4XTH/ck0lW5ZCwmalM0JwrrJ3zgmy719J8Tv29GVXlwure4xHETSVVnOi6XbFpSQWFlBNupCNcloOmrPfqybPFxMaJgOAQQD9OQ6fwP5GSgKljTOduvQcQUWTqnHERO98=
+      - secure: tPaK2DUErEUJydY059r6MD+D7ApFv/r0KY4JI4A0o74tFi/VkGaocRdHB6FLk1fUGTZNlWPsEavl26OWFb+aOpo+4a59HEZq4gP5MJ18iFFmtgcZ+/PPV7LJiDCRsP3mEDg38KGD211wIXrHCLx1GUnjS686WtwJMDQ7gtxFiaokqnrX/dZN9aTq3KO8AJBMoVZgz2JQHIA+rwH1hn5lmt4hhbvv55N/sFMj6xjwCE3f/ba3D5FyOK6fxB2YDzrBUraIpLVPZ/NCi6RE4bLiye+RhKqT2+04rDcxmS5suyvQj2nv3z7DxjFX4rluTZih5Ylmp9dmHmCuA8wzdyx/lvh2e1xLlsoXX+K7MNZoUEriKIKMK/XNrZvUUfptg4rUvjea8sjew8QEa0GRK4RUNvkhIsz7SY0Iki0j0V6rGea81gstVVfsORGmA33E///7Mxe1P5bHa0xZNUgqA9VI2UrsiweiphnVF/3UGcrCuFa9M7Fj8/HLvx+gNRDYzS6ElzfaeIFvxI+839eUCGbUGBtb1KWqfO0+jtfZvBK2ymcrLbcSwGgjYEQxy+x4O0MAUgTHiqqfS38zThSO2ND/TP+0Q1OV98UV1xNPLr+mxSwtGhXJo9Z3E6fi0sgZ9ososTRi9jzGsAu6cvTJ5qNeJYMXGP4bTHzeivKSfvAnStg=
+      - COMMIT=${TRAVIS_COMMIT::8} 
+    
+services:
+    - docker
+
+script:
+    - make all
+
+after_success:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - export REPO=$DOCKER_USER/vapoursynth
+    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+    - echo $REPO:$TAG:$COMMIT
+    - docker build -f Dockerfile -t $REPO:$COMMIT .
+    - docker tag $REPO:$COMMIT $REPO:$TAG
+    - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+    - docker push $REPO
+    - make clean
