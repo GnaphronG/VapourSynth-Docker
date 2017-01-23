@@ -14,7 +14,7 @@ build: ## Contruct the build container and build the binaries and libraries
 	@mkdir -p ${BUILD_DIR}
 
 app: build ## Build the application an the dependencies
-	docker run --rm --user ${USER_ID}:${USER_GROUP} --volume ${SRC_DIR}:/usr/src --volume ${BUILD_DIR}:/usr/local ${BUILD_IMAGE} make vapoursynth vapoursynth_install
+	docker run --rm --user ${USER_ID}:${USER_GROUP} --volume ${SRC_DIR}:/usr/src --volume ${BUILD_DIR}:/usr/local -e VAPOURSYNTH_RELEASE=${VAPOURSYNTH_RELEASE} ${BUILD_IMAGE} make vapoursynth vapoursynth_install
 
 plugins: app
 	docker run --rm --user ${USER_ID}:${USER_GROUP} --volume ${SRC_DIR}:/usr/src --volume ${BUILD_DIR}:/usr/local ${BUILD_IMAGE} make plugins plugins_install
