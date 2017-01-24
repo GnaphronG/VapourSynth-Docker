@@ -6,18 +6,18 @@ env:
         - secure: 5trMLZf56QRRY3KwxLheB4USsG5ViHraTdfdHMtszsboKlaUL2WBsIVD7lRjkKPArjjI/EdLzaKvdW9ZgS/FpC/wZM0Ljdm1bZb7TKBSa6zKb0WprgJuY9vYOMJZfZf8GQ13S3/2K1tBlMiQq74ZcQIe8P4+swh2srdWRZuPN6vxQwNYWsYNCvf6nVQK6JL7KHbGWwjYHSc4l+uJDywT8BHK9jpSu5CobrOcbgnSke37r8/T2Ua6a+jNoNpAXAEFvQJN7TWCp+Ms9PHpVltdBnMIVbvTFfrixeO8y4NQeXjzCADCLUb8e4rfzCepDxwhwXUnff33aR/icNbdkhvhvVYcUB5JN+fq9anHjQ6OmDyqrU0rsAfOAzG0sVeBVS2J52yC/Y5tMBSRbFQGvulGBeAEH75aQAXN1nHcLsioyWxRMAUAP9zuhD9w9qwEjlKUoaZ/FUa/1FFsSid2aSTxMzOXyjZ5MDYTbVM668ku6PcSWmi2fd054Y1OoslLGandiLQC+rhylox7Z60AcZZu8sIDR7S0Cu4oUMGFVLsLpsgv5dT6kAGvobNRv2iOlt5YTPSCvpJB5/M4xqHqYyCrieijLAeZONSTT5tgvblfdXuLawucd+KK2YLhGF4VgBK6uikamqZXBpvkylGt0dMvA8A1PwdAdkt5C2P8jiDA27U=
         - secure: A3PbD0zrnDmiH1BsWno6p1v14aHnVu3OmZSMSDy+VvwvSPpYiNZPiepO4Ii1Wd6DGApjQwktvvjIk60UOfwhy6rRgtNo8mrpsobnvpqg3to8t50iaTPkkqUCEv3UxE1hgf1pmQ3Oq8QxnCWIe62A91yi7Zym8VzH7VLGXEfn6an/EVN0oMNKJL2zGpZHOWDI5BDWdPG/Lv2Go5yj4KF3bveZG3NbHekjpuwU/TgJMISRZtYn/CyxRoZUl1MfUCfBc83VNLnUqnF+3eFoo3P/RktmOxSzQvsDNQaz51fTD/mWsgk9psiFxd/UdrEt3OHIpIW05B2DQpSESVSvO0hDkererwp4lMbqJMewHHTZGTjB0UHnw0CpSWmueUO+DNqTt5TS8GGryfPQfERSsM1rB7VbfQEI0c38F2v027Lj7bRx/bV7T4N6nh9e7Pk5RAvOEtvkZInBVjAvEIipHkiKlfRkxxEN3hZ0FcdkkEtCN1eLlNb9jeIXvq98n3IuAkzUd+ZutW93IwGPGC+MSAJUGgcW8Fxx45QmZjZ7zbTtN5vTySb0tcZ9Rbu2iJU8HhoPOkM4CwOyX7c8qhxPy14dyhuXZlnE5cM1hW/zkdO8ZKtOutKF4EgeSmOftl/LqnfLc0iXJHT9aQ/G2DcL/Yj6FdWfah2g1CKgbl0qajKy9PE=
     matrix:
-        - VERSION=R35
-        - VERSION=R36
+        - VERSION=35
+        - VERSION=36
     
 install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images
 
 before_script:
   - env | sort
-  - image="vapoursynth:${VERSION}${VARIANT:+-$VARIANT}"
+  - image="vapoursynth:r${VERSION}${VARIANT:+-$VARIANT}"
 
 script:
-  - make VAPOURSYNTH_RELEASE=${VERSION} IMAGE=${image} all ${VARIANT}
+  - make VAPOURSYNTH_RELEASE=R${VERSION} IMAGE=${image} all ${VARIANT}
 
 after_script:
   - docker images
@@ -26,7 +26,6 @@ after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=$DOCKER_USER/$image
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - docker tag $REPO `echo $REPO:$VTAG | tr 'A-Z' 'a-z'`
   - docker push $REPO
   - make IMAGE=$IMAGE clean
     
