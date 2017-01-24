@@ -1,5 +1,9 @@
-ZIMG_RELEASE ?= release-2.4
 VAPOURSYNTH_RELEASE ?= R36
+ifeq ($(VAPOURSYNTH_RELEASE), R35)
+ZIMG_RELEASE ?= release-2.3
+else 
+ZIMG_RELEASE ?= release-2.4
+endif
 PREFIX ?= /usr/local
 JOBS := $(shell echo $$(( $$(grep -c ^processor /proc/cpuinfo) + 1 )))
 
