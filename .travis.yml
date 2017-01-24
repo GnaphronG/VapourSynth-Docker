@@ -2,7 +2,6 @@ language: bash
 services: docker
 
 env:
-    - IMAGE=vapoursynth
     - VERSION=R35
     - VERSION=R36
     
@@ -11,7 +10,7 @@ install:
 
 before_script:
   - env | sort
-  - image="$IMAGE:${VERSION}${VARIANT:+-$VARIANT}"
+  - image="vapoursynth:${VERSION}${VARIANT:+-$VARIANT}"
 
 script:
   - make VAPOURSYNTH_RELEASE=${VERSION} IMAGE=${image} all ${VARIANT}
