@@ -26,8 +26,7 @@ after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=$DOCKER_USER/$image
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - export VTAG=`echo $VERSION | tr 'A-Z' 'a-z'`
-  - docker tag $REPO $REPO:$VTAG
+  - docker tag $REPO `echo $REPO:$VTAG | tr 'A-Z' 'a-z'`
   - docker push $REPO
   - make IMAGE=$IMAGE clean
     
