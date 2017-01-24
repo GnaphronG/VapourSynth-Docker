@@ -14,7 +14,7 @@ install:
 
 before_script:
   - env | sort
-  - image="vapoursynth:r${VERSION}${VARIANT:+-$VARIANT}"
+  - image="$DOCKER_USER/vapoursynth:r${VERSION}${VARIANT:+-$VARIANT}"
 
 script:
   - make VAPOURSYNTH_RELEASE=R${VERSION} IMAGE=${image} all ${VARIANT}
@@ -24,9 +24,9 @@ after_script:
 
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
-  - export REPO=$DOCKER_USER/$image
+  - export REPO=$DOCKER_USER/vapoursynth
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - docker push $REPO
-  - make IMAGE=$IMAGE clean
+  - docker push $REPO 
+  - make IMAGE=${image} clean
     
 # vim:set et ts=2 sw=2:
