@@ -4,16 +4,13 @@ services: docker
 env:
     - IMAGE=vapoursynth
     - VERSION=R35
-    - VERSION=R35 VARIANT=plugins
     - VERSION=R36
-    - VERSION=R36 VARIANT=plugins
     
 install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images
 
 before_script:
   - env | sort
-  - cd "$VERSION"
   - image="$IMAGE:${VERSION}${VARIANT:+-$VARIANT}"
 
 script:
