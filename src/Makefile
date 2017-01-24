@@ -54,7 +54,7 @@ vapoursynth_install: ${PREFIX}/lib/pkgconfig/vapoursynth.pc
 ## VapourSynth Plugins: https://github.com/darealshinji/vapoursynth-plugins
 vapoursynth-plugins:
 	git clone https://github.com/darealshinji/vapoursynth-plugins.git
-	git apply --directory=vapoursynth-plugins vapoursynth-plugins.patch
+#	git apply --directory=vapoursynth-plugins vapoursynth-plugins.patch
 
 vapoursynth-plugins/Makefile: vapoursynth-plugins ${PREFIX}/lib/pkgconfig/vapoursynth.pc
 	@cd vapoursynth-plugins && \
